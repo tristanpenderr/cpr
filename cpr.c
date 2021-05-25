@@ -66,5 +66,45 @@ void creerEnfantEtLire(int prcNum)
 {
     /* S.V.P. completez cette fonction selon les
        instructions du devoirs. */
-    printf("Hey \n");
+    int fd[2], pid;
+    char format[32];
+
+    sprintf(format, "Processus %d commence .\n", prcNum);
+    write(1, format, 32);
+
+    if (prcNum == 1){
+        sleep(5);
+    }else{
+        if(pipe(fd) < 0){
+            printf("Erreur durant pipe() .\n");
+        }
+        pid = fork();
+
+        if(pid < 0){
+            printf("Erreur durant fork(). \n");
+        }
+
+        if (pid == 0){
+            dup2(fd[1],1);
+            char str[10];
+            sprintf(str, "%d", prcNum-1);
+            char *args[]={"./cpr",str, NULL};
+            execvp(args[0], args);
+        
+        }
+        if (pid > 0) {
+            int readLen = read(fd[0]);
+
+            char readOut[32];
+
+            close(fd[1]);
+
+            while ((readLen, readOut, 32)){
+                write(1, readOut, 32);
+            }
+        }
+    }
+    sprintf(format, "Processus %d termine. \n", prcNum);
+    write(1,format,32);
+    close(1);
 }
