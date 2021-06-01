@@ -1,8 +1,9 @@
+
 /*------------------------------------------------------------
 Fichier: cpr.c
 
-Nom:
-Numero d'etudiant:
+Nom:Tristan Pender and Sebastien Leduc
+Numero d'etudiant:300065847 and [insert sebs student number]
 
 Description: Ce programme contient le code pour la creation
              d'un processus enfant et y attacher un tuyau.
@@ -107,4 +108,6 @@ void creerEnfantEtLire(int prcNum)
     sprintf(format, "Processus %d termine. \n", prcNum);
     write(1,format,32);
     close(1);
+
+
 }
