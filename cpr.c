@@ -87,29 +87,22 @@ void creerEnfantEtLire(int prcNum)
         if (pid < 0)
         {
             printf("Erreur de fork().\n");
-        }
-
-        if (pid == 0)
+        }else if (pid == 0)
         {
             dup2(fd[1], 1);
-
             char str[10];
             sprintf(str, "%d", prcNum - 1);
-
             char *args[] = {"./cpr", str, NULL};
-
             execvp(args[0], args);
-        }
-
-        if (pid > 0)
+        }else
         {
 
             int readLen;
             char readOut[CHARLEN];
-
+            
             close(fd[1]);
-
-            while ((readLen = read(fd[0], readOut, CHARLEN)) > 0)
+            
+            while (readLen = read(fd[0], readOut, CHARLEN) > 0)
             {
                 write(1, readOut, CHARLEN);
             }
