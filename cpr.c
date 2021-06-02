@@ -1,26 +1,20 @@
-
 /*------------------------------------------------------------
 Fichier: cpr.c
-
-Nom:Tristan Pender and Sebastien Leduc
-Numero d'etudiant:300065847 and [insert sebs student number]
-
+Nom:
+Numero d'etudiant:
 Description: Ce programme contient le code pour la creation
              d'un processus enfant et y attacher un tuyau.
 	     L'enfant envoyera des messages par le tuyau
 	     qui seront ensuite envoyes a la sortie standard.
-
 Explication du processus zombie
 (point 5 de "A completer" dans le devoir):
-
 	(s.v.p. completez cette partie);
-
 -------------------------------------------------------------*/
 #include <stdio.h>
 #include <sys/select.h>
 
 /* Prototype */
-void creerEnfantEtLire(int );
+void creerEnfantEtLire(int);
 
 /*-------------------------------------------------------------
 Function: main
@@ -36,20 +30,21 @@ Description:
 
 int main(int ac, char **av)
 {
-    int numeroProcessus; 
+    int numeroProcessus;
 
-    if(ac == 2)
+    if (ac == 2)
     {
-       if(sscanf(av[1],"%d",&numeroProcessus) == 1)
-       {
-           creerEnfantEtLire(numeroProcessus);
-       }
-       else fprintf(stderr,"Ne peut pas traduire argument\n");
+        if (sscanf(av[1], "%d", &numeroProcessus) == 1)
+        {
+            creerEnfantEtLire(numeroProcessus);
+        }
+        else
+            fprintf(stderr, "Ne peut pas traduire argument\n");
     }
-    else fprintf(stderr,"Arguments pas valide\n");
-    return(0);
+    else
+        fprintf(stderr, "Arguments pas valide\n");
+    return (0);
 }
-
 
 /*-------------------------------------------------------------
 Function: creerEnfantEtLire
@@ -67,47 +62,61 @@ void creerEnfantEtLire(int prcNum)
 {
     /* S.V.P. completez cette fonction selon les
        instructions du devoirs. */
+    int CHARLEN = 32;
+
     int fd[2], pid;
-    char format[32];
+    char format[CHARLEN];
 
-    sprintf(format, "Processus %d commence .\n", prcNum);
-    write(1, format, 32);
+    sprintf(format, "Processus %d commence.\n", prcNum);
+    write(1, format, CHARLEN);
 
-    if (prcNum == 1){
+    if (prcNum == 1)
+    {
         sleep(5);
-    }else{
-        if(pipe(fd) < 0){
-            printf("Erreur durant pipe() .\n");
+    }
+    else
+    {
+
+        if (pipe(fd) < 0)
+        {
+            printf("Erreur de pipe().\n");
         }
+
         pid = fork();
 
-        if(pid < 0){
-            printf("Erreur durant fork(). \n");
+        if (pid < 0)
+        {
+            printf("Erreur de fork().\n");
         }
 
-        if (pid == 0){
-            dup2(fd[1],1);
+        if (pid == 0)
+        {
+            dup2(fd[1], 1);
+
             char str[10];
-            sprintf(str, "%d", prcNum-1);
-            char *args[]={"./cpr",str, NULL};
-            execvp(args[0], args);
-        
-        }
-        if (pid > 0) {
-            int readLen = read(fd[0]);
+            sprintf(str, "%d", prcNum - 1);
 
-            char readOut[32];
+            char *args[] = {"./cpr", str, NULL};
+
+            execvp(args[0], args);
+        }
+
+        if (pid > 0)
+        {
+
+            int readLen;
+            char readOut[CHARLEN];
 
             close(fd[1]);
 
-            while ((readLen, readOut, 32)){
-                write(1, readOut, 32);
+            while ((readLen = read(fd[0], readOut, CHARLEN)) > 0)
+            {
+                write(1, readOut, CHARLEN);
             }
         }
     }
-    sprintf(format, "Processus %d termine. \n", prcNum);
-    write(1,format,32);
+    sprintf(format, "Processus %d termine.\n", prcNum);
+    write(1, format, CHARLEN);
+
     close(1);
-
-
 }
