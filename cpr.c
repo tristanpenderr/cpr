@@ -2,7 +2,7 @@
 
 /*------------------------------------------------------------
 Fichier: cpr.c
-Nom: Tristan Pender and Sebatien Leduc
+Nom: Tristan Pender and Sebastien Leduc
 Numero d'etudiant: 300065847 and 300066083
 Description: Ce programme contient le code pour la creation
              d'un processus enfant et y attacher un tuyau.
@@ -80,14 +80,14 @@ void creerEnfantEtLire(int prcNum)
     {
         if (pipe(fd) < 0)
         {
-            printf("Erreur de pipe.\n");
+            perror("Erreur de pipe \n");
         }
 
         pid = fork();
 
         if (pid < 0)
         {
-            printf("Erreur de fork.\n");
+            perror("Erreur de fork \n");
         }
         //si le processus est un enfant
         else if (pid == 0)
