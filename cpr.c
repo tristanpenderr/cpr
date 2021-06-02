@@ -1,3 +1,5 @@
+
+  
 /*------------------------------------------------------------
 Fichier: cpr.c
 Nom:
@@ -67,59 +69,51 @@ void creerEnfantEtLire(int prcNum)
     int fd[2], pid;
     char format[LONGEURCHAR];
 
-    sprintf(format, "Processus %d commence. \n", prcNum);
+    sprintf(format, "Processus %d commence.\n", prcNum);
     write(1, format, LONGEURCHAR);
 
-    if (prcNum == 1) // Si prcNum est 1, sleep(5)
-    {
+    if (prcNum == 1){
         sleep(5);
     }
-    else
-    {
-        if (pipe(fd) < 0) // erreur de pipe
-        {
-            printf("Erreur pipe.\n");
+    else{
+        if (pipe(fd) < 0){
+            printf("Erreur de pipe.\n");
         }
-        else
-        {
-            pid = fork();
 
-            if (pid < 0)
-            {
-                printf("Erreur fork.\n");
-            }
-            //si le processus est un enfant
-            else if (pid == 0)
-            {
-                //ferme le read pour le processus enfant
-                close(fd[0]);
+        pid = fork();
 
-                char str[10];
-                //donne la valeur de prcNum -1 à la variable str
-                sprintf(str, "%d", prcNum - 1);
-                //créer l'argument args pour le program cpr avec l'argument mis dans str
-                char *args[] = {"./cpr", str, NULL};
-                //exécute args
-                execvp(args[0], args);
-                close(fd[1]);
-            }
-            else
-            { // le processus parent
-                int longeur;
-                char out[LONGEURCHAR];
+        if (pid < 0){
+            printf("Erreur de fork.\n");
+        }
+        //si le processus est un enfant
+        else if (pid == 0){
+            //ferme le read pour le processus enfant 
+            close(fd[0]);
 
-                close(fd[1]);
-                //pendant qu'il y a toujours un processus, continue à écrire "Processus (prcNum) commence"
-                while (longeur = read(fd[0], out, LONGEURCHAR) > 0)
-                {
-                    write(1, out, LONGEURCHAR);
-                }
+            char str[10];
+            //donne la valeur de prcNum -1 à la variable str
+            sprintf(str, "%d", prcNum - 1);
+            //créer l'argument args pour le program cpr avec l'argument mis dans str
+            char *args[] = {"./cpr", str, NULL};
+            //exécute args
+            execvp(args[0], args);
+            close(fd[1]);
+        }
+        else{
+            int longeur;
+            char out[LONGEURCHAR];
+            
+            close(fd[1]);
+            //pendant qu'il y a toujours un processus, continue à écrire "Processus (prcNum) commence"
+            while (longeur = read(fd[0], out, LONGEURCHAR) > 0){
+                write(1, out, LONGEURCHAR);
             }
         }
-        //écrire le le processus se termine
-        sprintf(format, "Processus %d termine. \n", prcNum);
-        write(1, format, LONGEURCHAR);
-
-        close(1);
     }
+    //écrire le le processus se termine
+    sprintf(format, "Processus %d termine.\n", prcNum);
+    write(1, format, LONGEURCHAR);
+
+    close(1);
 }
+
