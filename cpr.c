@@ -83,27 +83,32 @@ void creerEnfantEtLire(int prcNum)
         if (pid < 0){
             printf("Erreur de fork.\n");
         }
+        //si le processus est un enfant
         else if (pid == 0){
+            //ferme le read pour le processus enfant 
             close(fd[0]);
-            dup2(fd[1], 1);
+
             char str[10];
+            //donne la valeur de prcNum -1 à la variable str
             sprintf(str, "%d", prcNum - 1);
+            //créer l'argument args pour le program cpr avec l'argument mis dans str
             char *args[] = {"./cpr", str, NULL};
+            //exécute args
             execvp(args[0], args);
             close(fd[1]);
         }
         else{
-
             int longeur;
             char out[LONGEURCHAR];
             
             close(fd[1]);
-            
+            //pendant qu'il y a toujours un processus, continue à écrire "Processus (prcNum) commence"
             while (longeur = read(fd[0], out, LONGEURCHAR) > 0){
                 write(1, out, LONGEURCHAR);
             }
         }
     }
+    //écrire le le processus se termine
     sprintf(format, "Processus %d termine.\n", prcNum);
     write(1, format, LONGEURCHAR);
 
