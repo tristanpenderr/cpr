@@ -66,8 +66,10 @@ void creerEnfantEtLire(int prcNum)
        instructions du devoirs. */
     int LONGEURCHAR = 32;
 
-    int fd[2], pid;
     char format[LONGEURCHAR];
+
+    int fd[2];
+    int pid;
 
     sprintf(format, "Processus %d commence.\n", prcNum);
     write(1, format, LONGEURCHAR);
