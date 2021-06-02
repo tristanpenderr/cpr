@@ -2,8 +2,8 @@
 
 /*------------------------------------------------------------
 Fichier: cpr.c
-Nom:
-Numero d'etudiant:
+Nom: Tristan Pender and Sebatien Leduc
+Numero d'etudiant: 300065847 and 300066083
 Description: Ce programme contient le code pour la creation
              d'un processus enfant et y attacher un tuyau.
 	     L'enfant envoyera des messages par le tuyau
