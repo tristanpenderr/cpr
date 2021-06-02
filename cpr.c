@@ -84,7 +84,7 @@ void creerEnfantEtLire(int prcNum)
             printf("Erreur de fork.\n");
         }
         else if (pid == 0){
-            
+            close(fd[0]);
             dup2(fd[1], 1);
             char str[10];
             sprintf(str, "%d", prcNum - 1);
