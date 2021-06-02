@@ -62,54 +62,50 @@ void creerEnfantEtLire(int prcNum)
 {
     /* S.V.P. completez cette fonction selon les
        instructions du devoirs. */
-    int CHARLEN = 32;
+    int LONGEURCHAR = 32;
 
     int fd[2], pid;
-    char format[CHARLEN];
+    char format[LONGEURCHAR];
 
     sprintf(format, "Processus %d commence.\n", prcNum);
-    write(1, format, CHARLEN);
+    write(1, format, LONGEURCHAR);
 
-    if (prcNum == 1)
-    {
+    if (prcNum == 1){
         sleep(5);
     }
-    else
-    {
-
-        if (pipe(fd) < 0)
-        {
-            printf("Erreur de pipe().\n");
+    else{
+        if (pipe(fd) < 0){
+            printf("Erreur de pipe.\n");
         }
 
         pid = fork();
 
-        if (pid < 0)
-        {
-            printf("Erreur de fork().\n");
-        }else if (pid == 0)
-        {
+        if (pid < 0){
+            printf("Erreur de fork.\n");
+        }
+        else if (pid == 0){
+            
             dup2(fd[1], 1);
             char str[10];
             sprintf(str, "%d", prcNum - 1);
             char *args[] = {"./cpr", str, NULL};
             execvp(args[0], args);
-        }else
-        {
+            close(fd[1]);
+        }
+        else{
 
-            int readLen;
-            char readOut[CHARLEN];
+            int longeur;
+            char out[LONGEURCHAR];
             
             close(fd[1]);
             
-            while (readLen = read(fd[0], readOut, CHARLEN) > 0)
-            {
-                write(1, readOut, CHARLEN);
+            while (longeur = read(fd[0], out, LONGEURCHAR) > 0){
+                write(1, out, LONGEURCHAR);
             }
         }
     }
     sprintf(format, "Processus %d termine.\n", prcNum);
-    write(1, format, CHARLEN);
+    write(1, format, LONGEURCHAR);
 
     close(1);
 }
