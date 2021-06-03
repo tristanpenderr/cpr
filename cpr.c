@@ -10,6 +10,9 @@ Description: Ce programme contient le code pour la creation
 	     qui seront ensuite envoyes a la sortie standard.
 Explication du processus zombie
 (point 5 de "A completer" dans le devoir):
+
+    Un processus "zombie" est un processus qui a complété l'exécution, mais ne ferme pas. Ce qui cause le programe à rester dans la table de processus.
+
 	(s.v.p. completez cette partie);
 -------------------------------------------------------------*/
 #include <stdio.h>
