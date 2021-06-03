@@ -11,7 +11,8 @@ Description: Ce programme contient le code pour la creation
 Explication du processus zombie
 (point 5 de "A completer" dans le devoir):
 
-    Un processus "zombie" est un processus qui a complété l'exécution, mais ne ferme pas. Ce qui cause le programe à rester dans la table de processus.
+    Un processus "zombie" est un processus qui a complete l'execution, mais ne ferme pas. Ce qui cause le programe à rester dans la table de processus.
+    Quand on fait sleep(10) avant la terminaison du processus, ca creer un processus zombie.
 
 	(s.v.p. completez cette partie);
 -------------------------------------------------------------*/
@@ -85,14 +86,14 @@ void creerEnfantEtLire(int prcNum)
     {
         if (pipe(fd) < 0)
         {
-            perror("Erreur de pipe \n");
+            fprintf(stderr, "Erreur de pipe \n");
         }
 
         pid = fork();
 
         if (pid < 0)
         {
-            perror("Erreur de fork \n");
+            fprintf(stderr, "Erreur de fork \n");
         }
         //si le processus est un enfant
         else if (pid == 0)
